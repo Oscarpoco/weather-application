@@ -14,7 +14,7 @@ function App() {
   const [dailyForecast, setDailyForecast] = useState([]);
   const [hourlyForecast, setHourlyForecast] = useState([]);
 
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=32.776665&lon=-96.796989&exclude=minute&appid=25160517a2420597ecea94ef0c801eb8&units=metric`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}&units=metric`;
 
   // LOAD WEATHER DATA
   useEffect(() => {

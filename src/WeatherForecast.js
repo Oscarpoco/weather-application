@@ -1,36 +1,36 @@
-// WeatherForecast.js
 import React from 'react';
-import './WeatherForecast.css'
 
 const WeatherForecast = ({ daily, hourly }) => {
   return (
     <div className="weather-forecast">
-      {/* Daily Forecast */}
       <div className="daily-forecast">
-        <p>Daily Forecast</p>
-        <ul>
-          {daily.map((day, index) => (
-            <li key={index}>
-              <span>{new Date(day.dt * 1000).toLocaleDateString()}</span>
-              <span>{Math.round(day.temp.day)}°C</span>
-              <span>{day.weather[0].main}</span>
-            </li>
-          ))}
-        </ul>
+        <h2>Daily Forecast</h2>
+        {daily && daily.length > 0 ? (
+          daily.map((day, index) => (
+            <div key={index} className="daily-item">
+              <p>Date: {new Date(day.dt * 1000).toLocaleDateString()}</p>
+              <p>Temp: {Math.round(day.temp.day)}°C</p>
+              <p>Weather: {day.weather[0].description}</p>
+            </div>
+          ))
+        ) : (
+          <p>No daily forecast data available.</p>
+        )}
       </div>
 
-      {/* Hourly Forecast */}
       <div className="hourly-forecast">
-        <p>Hourly Forecast</p>
-        <ul>
-          {hourly.map((hour, index) => (
-            <li key={index}>
-              <span>{new Date(hour.dt * 1000).toLocaleTimeString()}</span>
-              <span>{Math.round(hour.temp)}°C</span>
-              <span>{hour.weather[0].main}</span>
-            </li>
-          ))}
-        </ul>
+        <h2>Hourly Forecast</h2>
+        {hourly && hourly.length > 0 ? (
+          hourly.slice(0, 12).map((hour, index) => (
+            <div key={index} className="hourly-item">
+              <p>Time: {new Date(hour.dt * 1000).toLocaleTimeString()}</p>
+              <p>Temp: {Math.round(hour.temp)}°C</p>
+              <p>Weather: {hour.weather[0].description}</p>
+            </div>
+          ))
+        ) : (
+          <p>No hourly forecast data available.</p>
+        )}
       </div>
     </div>
   );
