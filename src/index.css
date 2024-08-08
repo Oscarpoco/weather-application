@@ -1,4 +1,20 @@
-body {
+/* ITEMS THAT I USE GLOBALLY */
+
+:root
+{
+  --neon-pink: #FF6EC7;
+  --dark-black: #000000;
+  --neon-aqua: #00FFFF;
+  --neon-white: #FFFFFF;
+  --border-radius: 10px;
+  --box-background: linear-gradient(40deg, var(--neon-white), var(--neon-aqua), var(--neon-white), var(--neon-aqua),var(--neon-white), var(--neon-white));
+}
+/* ENDS */
+
+
+/* BODY SETTING */
+body 
+{
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -7,7 +23,251 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*
+{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+/* ENDS */
+
+
+/* PARAGRAPH TAG GLOBALLY */
+p
+{
+  font-size: 1.2rem;
+  color: var(--dark-black);
+  font-weight: bold;
+}
+
+/* ENDS */
+
+
+/* HEADING 1 GLOBALLY */
+h1
+{
+  font-size: 3rem;
+  color: var(--neon-pink);
+  font-weight: bolder;
+  padding-left: 34px;
+}
+/* ENDS */
+
+
+
+
+
+/* APP COMPONENT STYLING */
+.App
+{
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-color: rgba(0,0,0,0.8);
+  /* background-color: var(--dark-black); */
+}
+
+.App:before
+{
+  content: '';
+  background: url(/public/Summer\ Season\ 🏖🏞.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+/* ENDS */
+
+/* SEARCH */
+header
+{
+  text-align: start;
+  padding: 1rem;
+  max-width: 700px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+}
+
+.search-icon
+{
+  color: var(--neon-aqua);
+  font-size: 2.5rem;
+}
+
+header input
+{
+  padding: .6rem .5rem;
+  border-radius: 10px;
+  border: 1px solid aqua;
+  background-color: #0000008a;
+  width: 100%;
+  text-align: center;
+  color: var(--neon-white);
+  cursor: pointer;
+}
+
+::placeholder
+{
+  color: var(--neon-aqua);
+}
+
+.hamburger
+{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 35px;
+  width: 35px;
+  border: none;
+  border-radius: 50%;
+  padding: 4px;
+  animation: glowing 20s infinite, pop-in-out 5s infinite;
+  transition: all .7s ease-in-out;
+}
+
+/* GLOWING BACKGROND */
+@keyframes glowing {
+  0% { background-color: #0000008a;}
+  45% { background-color: rgba(0, 255, 255, 0.331); }
+  90% { background-color: #ff6ec757; }
+}
+/* ENDS */
+
+/* POPING IN OUT BACKROUND */
+@keyframes pop-in-out {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0; }
+}
+
+
+.menu-icon
+{
+  color: var(--neon-aqua);
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+/* ENDS */
+
+
+/* MAIN STYLING */
+main
+{
+  max-width: 700px;
+  height: 90%;
+  margin: auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+/* TOP CONTAINER INSIDE MAIN */
+.top
+{
+  border-radius: var(--border-radius);
+  background: var(--box-background);
+  width: 100%;
+  margin: 0rem auto;
+  padding: .4em 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* DESCRIPTION INSIDE TOP */
+.description
+{
+  background-color: rgba(0, 0, 0, 0.825);
+  padding: .6rem 0;
+  text-align: center;
+}
+
+.description p
+{
+  color: var(--neon-white);
+}
+
+/* LOCATION INSIDE TOP */
+.location
+{
+  padding: 5px 0 10px 10px;
+}
+
+.location p
+{
+  font-size: 1.7rem;
+}
+
+.temperature
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.temperature p
+{
+  font-weight: unset;
+  font-size: 11px;
+  text-align: end;
+  padding-bottom: 10px;
+  padding-right: 5px;
+}
+/* TOP CONTAINER ENDS */
+
+/* MIDDLE CONTAINER */
+.middle
+{
+  width: 100%;
+  margin: 0rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather
+{
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 0.3em;
+}
+
+
+/* ENDS */
+
+/* BOTTOM CONTAINER INSIDE MAIN */
+.bottom
+{
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: var(--border-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  background: var(--box-background);
+  width: 100%;
+  margin: 1rem auto;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* WEATHER TITLE */
+
+span
+{
+  color: var(--neon-pink);
+  font-weight: lighter;
+  font-size: 1rem;
+}
+
+/* MAIN ENDS */
+

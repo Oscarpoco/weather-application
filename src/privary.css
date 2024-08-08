@@ -1,0 +1,53 @@
+
+.privacy-security-consent 
+{
+    position: fixed;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95); /* Light semi-transparent background */
+    color: #333;
+    padding: 1em 2em;
+    text-align: center;
+    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .privacy-security-consent h2 
+  {
+    margin: 0 0 1em;
+    font-size: 1.5rem;
+  }
+  
+  .privacy-security-consent p 
+  {
+    font-size: 1rem;
+    margin-bottom: 1.5em;
+  }
+  
+  .consent-buttons 
+  {
+    display: flex;
+    justify-content: space-around;
+    gap: 1em;
+  }
+  
+  .consent-buttons button 
+  {
+    background: #4caf50; 
+    color: #fff;
+    border: none;
+    padding: 0.5em 1.5em;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    flex: 1;
+  }
+  
+  .consent-buttons button:nth-of-type(2) 
+  {
+    background: #f44336; /* Red for decline */
+  }
+  
+  
