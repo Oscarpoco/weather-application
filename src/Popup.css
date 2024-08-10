@@ -1,0 +1,241 @@
+/* Full-screen overlay */
+.popup-overlay 
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 0 10px;
+  }
+  
+  /* Popup content styled as full-screen */
+  .popup-content 
+  {
+    background: rgba(0, 0, 0, 1);
+    padding: 2.5em;
+    padding-top: 1em;
+    border-radius: 10px;
+    /* border: 1px solid aqua; */
+    position: relative;
+    /* top: 30px; */
+    width: 90%;
+    height: 92vh;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: .4em;
+  }
+  
+  /* Close button */
+  .popup-close {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    transform: rotate(45deg);
+    color: red;
+  }
+
+
+  .manage-cities
+  {
+    height: 50%;
+    width: 100%;
+    /* background-color: #fff; */
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    border-bottom: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    overflow: auto;
+
+  }
+
+  ul
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+  }
+
+  ul li
+  {
+    list-style: none;
+    color: white;
+    border: 1px solid aqua;
+    padding: 5px 0;
+  }
+
+  .settings
+  {
+    height: 25%;
+    width: 100%;
+    /* background-color: blue; */
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    border-bottom: 1px solid white;
+  }
+
+  .settings button 
+  {
+    background-color: transparent;
+    border: 1px solid aqua;
+    color: aqua;
+    padding: .5em 1em;
+    margin: 0.2em;
+    cursor: pointer;
+  }
+  
+  .settings button.active 
+  {
+    background-color: aqua;
+    color: black;
+  }
+  
+
+  .more
+  {
+    height: 25%;
+    width: 100%;
+    /* background-color: red; */
+    text-align: center;
+    font-size: .9em;
+    font-weight: bold;
+    color: white;
+  }
+  .more h3
+  {
+    padding-bottom: 15px;
+  }
+  
+
+  /* DEVLOPER CONTENT */
+
+  .devloper-overlay 
+  {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+  }
+  
+  .developer-content 
+  {
+    background-color: lightblue;
+    width: 80%;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1002;
+    text-align: center;
+  }
+
+  .developer-content span 
+  {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .developer-content p 
+  {
+    color: grey;
+    font-size: 16px;
+    font-weight: unset;
+    background-color: rgba(0, 0, 0);
+    color: aqua;
+    padding: 15px 15px 5px 15px;
+    border-radius: 10px;
+  }
+
+  .developer-content p span
+  {
+    color: #FF6EC7;
+    font-size:1.5em;
+  }
+
+  .developer-content .arrow
+  {
+    margin-top: 10px;
+  }
+
+  .social-icons
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7em;
+    color: #FF6EC7;
+    padding: 5px 0;
+    background-color: rgba(0, 0, 0);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .developer-content h6 
+  {
+    background-color: rgba(0, 0, 0);
+    color: aqua;
+    padding: 10px 0 10px 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .devloper-popup-close 
+  {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 2.2rem;
+    cursor: pointer;
+    color: red;
+    transform: rotate(45deg);
+  }
+  
+  .developer-popup 
+  {
+    background: #f4f4f4;
+    padding: 20px 15px;
+    border-radius: 10px;
+    z-index: 1001;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.2em;
+  }
+  
+  .developer-popup h3 
+  {
+    margin-bottom: 10px;
+  }
+  
+  .developer-popup p 
+  {
+    margin-bottom: 20px;
+  }
+  

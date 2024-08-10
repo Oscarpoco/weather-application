@@ -24,6 +24,10 @@
   {
     font-size: 1rem;
     margin-bottom: 1.5em;
+    color: aqua;
+    background-color: rgba(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
   }
   
   .consent-buttons 

@@ -1,57 +1,94 @@
-// App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { FaLocationDot } from 'react-icons/fa6';
 import { MdLocationSearching } from 'react-icons/md';
+import { FaCloudSun } from "react-icons/fa";
 import { IoMenuSharp } from 'react-icons/io5';
 import CookieConsent from './CookieConsent';
 import PrivacySecurityConsent from './PrivacySecurityConsent';
 import WeatherForecast from './WeatherForecast';
+import Popup from './Popup';
 
 function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState('');
   const [dailyForecast, setDailyForecast] = useState([]);
   const [hourlyForecast, setHourlyForecast] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [settings, setSettings] = useState({
+    temperatureUnit: 'metric' 
+  });
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}&units=metric`;
 
-  // LOAD WEATHER DATA
+  // LOAD DATA
   useEffect(() => {
     const savedData = localStorage.getItem('weatherData');
     if (savedData) {
       setData(JSON.parse(savedData));
     }
-  }, [setData]);
+  }, []);
+  // ENDS
 
-  // SAVE WEATHER DATA TO LOCALSTORAGE AFTER FETCHING IT
+  // SAVE DATA
   useEffect(() => {
     if (data.name) {
       localStorage.setItem('weatherData', JSON.stringify(data));
     }
   }, [data]);
+  // ENDS
+
+  // FETCH WEATHER DATA FUNCTION
+  const fetchWeatherData = useCallback(() => {
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
+      .then((response) => {
+        const fetchedData = response.data;
+        setData(fetchedData);
+
+        const lat = fetchedData.coord.lat;
+        const lon = fetchedData.coord.lon;
+        const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`;
+
+        return axios.get(forecastUrl);
+      })
+      .then((response) => {
+        setDailyForecast(response.data.daily);
+        setHourlyForecast(response.data.hourly);
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+      });
+  }, [location, settings.temperatureUnit]);
 
   // SEARCH FUNCTION
   const SearchLocation = (e) => {
     if (e.key === 'Enter') {
-      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=25160517a2420597ecea94ef0c801eb8&units=metric`)
-        .then((response) => {
-          setData(response.data);
-          return axios.get(url); // Fetch forecast data
-        })
-        .then((response) => {
-          setDailyForecast(response.data.daily);
-          setHourlyForecast(response.data.hourly);
-        })
-        .catch((error) => {
-          console.error("Error fetching weather data:", error);
-        });
+      fetchWeatherData();
     }
+  };
+
+  // AUTO UPDATE WEATHER EVERY 1 MINUTE
+  useEffect(() => {
+    if (data.name) {
+      const interval = setInterval(() => {
+        fetchWeatherData();
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }
+  }, [data.name, settings.temperatureUnit, fetchWeatherData]); // fetchWeatherData is now stable, so it's safe to include it as a dependency
+
+  // TOGGLE POPUP MENU
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  // HANDLE TEMPERATURE UNIT CHANGE
+  const handleUnitChange = (unit) => {
+    setSettings({ ...settings, temperatureUnit: unit });
   };
 
   return (
     <div className="App">
-      {/* SEARCH */}
       <header>
         <MdLocationSearching className='search-icon' />
         <input
@@ -61,75 +98,60 @@ function App() {
           placeholder='Search Location'
           onKeyPress={SearchLocation}
         />
-        <div className='hamburger'>
+        <div className='hamburger' onClick={togglePopup}>
           <IoMenuSharp className='menu-icon'/>
         </div>
       </header>
-      {/* ENDS */}
 
-      {/* CONDITION TO CHECK IF THERE'S NAME IN DATA TO DISPLAY */}
       {data.name && (
         <main>
-          {/* TOP CONTAINER INSIDE MAIN */}
           <div className='top'>
-            {/* LOCATION INSIDE TOP CONTAINER */}
             <div className='location' style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
               <p><FaLocationDot className='icon' style={{ fontSize: '1.18rem', color: 'red' }} /></p>
               <p>{data.name}</p>
+              <div className='weather-icons'>
+                <FaCloudSun />
+              </div>
             </div>
-            {/* ENDS */}
 
-            {/* TEMPERATURE INSIDE TOP CONTAINER */}
             <div className='temperature'>
-              {data.main ? <h1>{Math.round(data.main.temp)}°C</h1> : null}
+              {data.main ? <h1>{Math.round(settings.temperatureUnit === 'metric' ? data.main.temp : data.main.temp * 9/5 + 32)}°{settings.temperatureUnit === 'metric' ? 'C' : 'F'}</h1> : null}
               <p>Last updated: {new Date().toLocaleTimeString()}</p>
             </div>
-            {/* ENDS */}
 
-            {/* DESCRIPTION OF THE CURRENT WEATHER INSIDE TOP CONTAINER */}
             <div className='description'>
               {data.weather ? <p>{data.weather[0].main}</p> : null}
             </div>
-            {/* ENDS */}
           </div>
-          {/* TOP CONTAINER ENDS */}
 
-          {/* MIDDLE CONTAINER */}
           <div className='middle'>
             <div className='weather'>
-              <WeatherForecast daily={dailyForecast} hourly={hourlyForecast} />
+              <WeatherForecast daily={dailyForecast} hourly={hourlyForecast} unit={settings.temperatureUnit} />
             </div>
           </div>
-          {/* ENDS */}
 
-          {/* BOTTOM CONTAINER INSIDE MAIN */}
           <div className='bottom'>
-            {/* FEELS LIKE INSIDE BOTTOM CONTAINER */}
             <div className='feels' style={{ display: 'flex', flexDirection: 'column', gap: '0.5em' }}>
               <p><span>Feels-like</span></p>
-              {data.main ? <p>{Math.round(data.main.feels_like)}°C</p> : null}
+              {data.main ? <p>{Math.round(settings.temperatureUnit === 'metric' ? data.main.feels_like : data.main.feels_like * 9/5 + 32)}°{settings.temperatureUnit === 'metric' ? 'C' : 'F'}</p> : null}
             </div>
-            {/* ENDS */}
 
-            {/* HUMIDITY INSIDE BOTTOM CONTAINER */}
             <div className='humidity' style={{ display: 'flex', flexDirection: 'column', gap: '0.5em' }}>
               <p><span>Humidity</span></p>
               {data.main ? <p>{data.main.humidity}%</p> : null}
             </div>
-            {/* ENDS */}
 
-            {/* WIND INSIDE BOTTOM CONTAINER */}
             <div className='wind' style={{ display: 'flex', flexDirection: 'column', gap: '0.5em' }}>
               <p><span>Wind speed</span></p>
-              {data.wind ? <p>{Math.round(data.wind.speed)} mph</p> : null}
+              {data.wind ? <p>{Math.round(settings.temperatureUnit === 'metric' ? data.wind.speed : data.wind.speed * 2.237)} mph</p> : null}
             </div>
-            {/* ENDS */}
           </div>
-          {/* BOTTOM CONTAINER ENDS */}
         </main>
       )}
+
       <CookieConsent /> 
       <PrivacySecurityConsent />
+      <Popup isOpen={isPopupOpen} onClose={togglePopup} settings={settings} handleUnitChange={handleUnitChange}/>
     </div>
   );
 }

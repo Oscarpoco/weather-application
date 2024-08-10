@@ -16,6 +16,7 @@
   
 .daily-forecast p, .hourly-forecast p {
     margin: 0 0 0.5em;
+    color: white;
 }
   
 .daily-forecast ul, .hourly-forecast ul 
