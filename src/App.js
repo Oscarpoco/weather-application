@@ -12,30 +12,37 @@ import Popup from './Popup';
 function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState('');
-  const [dailyForecast, setDailyForecast] = useState([]);
-  const [hourlyForecast, setHourlyForecast] = useState([]);
+  const [forecastData, setForecastData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [citiesHistory, setCitiesHistory] = useState([]);
   const [settings, setSettings] = useState({
     temperatureUnit: 'metric' 
   });
 
-
-  // LOAD DATA
+  // LOAD WEATHER DATA FROM LOCAL STORAGE
   useEffect(() => {
     const savedData = localStorage.getItem('weatherData');
     if (savedData) {
       setData(JSON.parse(savedData));
     }
-  }, []);
-  // ENDS
 
-  // SAVE DATA
+    const savedHistory = localStorage.getItem('citiesHistory');
+    if (savedHistory) {
+      setCitiesHistory(JSON.parse(savedHistory));
+    }
+  }, []);
+
+  // SAVE WEATHER DATA TO LOCAL STORAGE
   useEffect(() => {
     if (data.name) {
       localStorage.setItem('weatherData', JSON.stringify(data));
     }
   }, [data]);
-  // ENDS
+
+  // SAVE CITIES HISTORY TO LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem('citiesHistory', JSON.stringify(citiesHistory));
+  }, [citiesHistory]);
 
   // FETCH WEATHER DATA FUNCTION
   const fetchWeatherData = useCallback(() => {
@@ -44,22 +51,24 @@ function App() {
         const fetchedData = response.data;
         setData(fetchedData);
 
-        const lat = fetchedData.coord.lat;
-        const lon = fetchedData.coord.lon;
-        const forecastUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`;
+        // Add the searched city to the history
+        setCitiesHistory((prevHistory) => {
+          // Avoid duplicates
+          const newHistory = prevHistory.filter(city => city !== fetchedData.name);
+          return [fetchedData.name, ...newHistory];
+        });
 
-        return axios.get(forecastUrl);
+        return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
       })
       .then((response) => {
-        setDailyForecast(response.data.daily);
-        setHourlyForecast(response.data.hourly);
+        setForecastData(response.data.list);
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
       });
   }, [location, settings.temperatureUnit]);
 
-  // SEARCH FUNCTION
+  // SEARCH LOCATION FUNCTION
   const SearchLocation = (e) => {
     if (e.key === 'Enter') {
       fetchWeatherData();
@@ -75,7 +84,7 @@ function App() {
 
       return () => clearInterval(interval);
     }
-  }, [data.name, settings.temperatureUnit, fetchWeatherData]); // fetchWeatherData is now stable, so it's safe to include it as a dependency
+  }, [data.name, settings.temperatureUnit, fetchWeatherData]);
 
   // TOGGLE POPUP MENU
   const togglePopup = () => {
@@ -85,6 +94,12 @@ function App() {
   // HANDLE TEMPERATURE UNIT CHANGE
   const handleUnitChange = (unit) => {
     setSettings({ ...settings, temperatureUnit: unit });
+  };
+
+  // HANDLE CITY SELECTION FROM HISTORY
+  const handleCitySelect = (city) => {
+    setLocation(city);
+    fetchWeatherData();
   };
 
   return (
@@ -126,7 +141,7 @@ function App() {
 
           <div className='middle'>
             <div className='weather'>
-              <WeatherForecast daily={dailyForecast} hourly={hourlyForecast} unit={settings.temperatureUnit} />
+              <WeatherForecast forecastData={forecastData} unit={settings.temperatureUnit} />
             </div>
           </div>
 
@@ -151,7 +166,14 @@ function App() {
 
       <CookieConsent /> 
       <PrivacySecurityConsent />
-      <Popup isOpen={isPopupOpen} onClose={togglePopup} settings={settings} handleUnitChange={handleUnitChange}/>
+      <Popup 
+        isOpen={isPopupOpen} 
+        onClose={togglePopup} 
+        settings={settings} 
+        handleUnitChange={handleUnitChange} 
+        citiesHistory={citiesHistory} 
+        onCitySelect={handleCitySelect} 
+      />
     </div>
   );
 }

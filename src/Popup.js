@@ -5,8 +5,9 @@ import { SlSocialTwitter } from "react-icons/sl";
 import { RxDiscordLogo } from "react-icons/rx";
 import { IoLogoReddit } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
-const Popup = ({ isOpen, onClose, settings, handleUnitChange }) => {
+const Popup = ({ isOpen, onClose, settings, handleUnitChange, citiesHistory, onCitySelect }) => {
   const [isDeveloperPopupOpen, setIsDeveloperPopupOpen] = useState(false);
   const [isNewsPopupOpen, setIsNewsPopupOpen] = useState(false);
 
@@ -37,7 +38,9 @@ const Popup = ({ isOpen, onClose, settings, handleUnitChange }) => {
             <h3>Manage Cities</h3>
             <p><span>My Visited Cities:</span></p>
             <ul>
-              
+                {citiesHistory.map((city, index) => (
+                    <li key={index} onClick={() => onCitySelect(city)}>{city}<button><MdOutlineDeleteForever className='del-icon'/></button></li>
+              ))}
             </ul>
           </div>
           {/* ENDS */}
@@ -51,13 +54,13 @@ const Popup = ({ isOpen, onClose, settings, handleUnitChange }) => {
                 className={settings.temperatureUnit === 'metric' ? 'active' : ''}
                 onClick={() => handleUnitChange('metric')}
               >
-                °C
+                Celcius
               </button>
               <button
                 className={settings.temperatureUnit === 'imperial' ? 'active' : ''}
                 onClick={() => handleUnitChange('imperial')}
               >
-                °F
+                Fahrenheit
               </button>
             </div>
           </div>
