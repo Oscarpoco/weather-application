@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { FaLocationDot } from 'react-icons/fa6';
 import { MdLocationSearching } from 'react-icons/md';
-import { FaCloudSun } from "react-icons/fa";
 import { IoMenuSharp } from 'react-icons/io5';
 import CookieConsent from './CookieConsent';
 import PrivacySecurityConsent from './PrivacySecurityConsent';
@@ -45,33 +44,37 @@ function App() {
   }, [citiesHistory]);
 
   // FETCH WEATHER DATA FUNCTION
-  const fetchWeatherData = useCallback(() => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
-      .then((response) => {
-        const fetchedData = response.data;
-        setData(fetchedData);
+const fetchWeatherData = useCallback((selectedCity) => {
+  const query = selectedCity || location; // Use selectedCity if provided, otherwise fallback to location state
 
-        // Add the searched city to the history
-        setCitiesHistory((prevHistory) => {
-          // Avoid duplicates
-          const newHistory = prevHistory.filter(city => city !== fetchedData.name);
-          return [fetchedData.name, ...newHistory];
-        });
+  axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
+    .then((response) => {
+      const fetchedData = response.data;
+      setData(fetchedData);
 
-        return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
-      })
-      .then((response) => {
-        setForecastData(response.data.list);
-      })
-      .catch((error) => {
-        console.error("Error fetching weather data:", error);
+      // Add the searched city to the history
+      setCitiesHistory((prevHistory) => {
+        const newHistory = prevHistory.filter(city => city !== fetchedData.name);
+        return [fetchedData.name, ...newHistory];
       });
-  }, [location, settings.temperatureUnit]);
+
+      return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
+    })
+    .then((response) => {
+      setForecastData(response.data.list);
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+    });
+}, [location, settings.temperatureUnit]);
+// ENDS
+
 
   // SEARCH LOCATION FUNCTION
   const SearchLocation = (e) => {
     if (e.key === 'Enter') {
       fetchWeatherData();
+      setLocation(''); // Clear the input field after searching
     }
   };
 
@@ -99,11 +102,13 @@ function App() {
   // HANDLE CITY SELECTION FROM HISTORY
   const handleCitySelect = (city) => {
     setLocation(city);
-    fetchWeatherData();
+    fetchWeatherData(city);
   };
 
   return (
     <div className="App">
+
+      {/* HEADER FOR SEARCH BAR */}
       <header>
         <MdLocationSearching className='search-icon' />
         <input
@@ -117,15 +122,24 @@ function App() {
           <IoMenuSharp className='menu-icon'/>
         </div>
       </header>
+      {/* ENDS */}
 
+      {/* BODY */}
       {data.name && (
         <main>
+
+          {/* TOP CONTAINER */}
           <div className='top'>
             <div className='location' style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
               <p><FaLocationDot className='icon' style={{ fontSize: '1.18rem', color: 'red' }} /></p>
               <p>{data.name}</p>
               <div className='weather-icons'>
-                <FaCloudSun />
+                {data.weather && data.weather[0] && (
+                  <img 
+                    src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} 
+                    alt={data.weather[0].description} 
+                  />
+                )}
               </div>
             </div>
 
@@ -138,13 +152,18 @@ function App() {
               {data.weather ? <p>{data.weather[0].main}</p> : null}
             </div>
           </div>
+          {/* ENDS */}
 
+
+          {/* MIDDLE CONTAINER */}
           <div className='middle'>
             <div className='weather'>
               <WeatherForecast forecastData={forecastData} unit={settings.temperatureUnit} />
             </div>
           </div>
+          {/* ENDS */}
 
+          {/* BOTTOM CONTAINER */}
           <div className='bottom'>
             <div className='feels' style={{ display: 'flex', flexDirection: 'column', gap: '0.5em' }}>
               <p><span>Feels-like</span></p>
@@ -161,9 +180,12 @@ function App() {
               {data.wind ? <p>{Math.round(settings.temperatureUnit === 'metric' ? data.wind.speed : data.wind.speed * 2.237)} mph</p> : null}
             </div>
           </div>
+          {/* ENDS */}
+
         </main>
       )}
 
+      {/* POPUPS */}
       <CookieConsent /> 
       <PrivacySecurityConsent />
       <Popup 
@@ -173,7 +195,9 @@ function App() {
         handleUnitChange={handleUnitChange} 
         citiesHistory={citiesHistory} 
         onCitySelect={handleCitySelect} 
+        setCitiesHistory={setCitiesHistory}
       />
+      {/* ENDS  */}
     </div>
   );
 }

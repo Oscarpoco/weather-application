@@ -5,13 +5,15 @@
     gap: 1em;
 }
 
-.weather-forecast p{
+.weather-forecast p
+{
     font-size: .8em;
 
 }
   
   /* Row container for horizontal scrolling */
-  .forecast-row {
+.forecast-row 
+{
     display: flex;
     overflow-x: auto;
     gap: 1em;
@@ -19,10 +21,13 @@
     background: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
+    
+}
+
   
   /* Daily and hourly forecast styling */
-  .daily-forecast, .hourly-forecast {
+.daily-forecast, .hourly-forecast 
+{
     overflow-x: auto;
     padding: 1em;
     background: #f9f9f9;
@@ -30,15 +35,22 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     /* font-size: 1em; */
-  }
+    
+}
 
-  .daily-forecast span, .hourly-forecast span
-  {
+.daily-forecast img, .hourly-forecast img
+{
+ 
+    
+}
+
+.daily-forecast span, .hourly-forecast span
+{
     font-weight: bold;
-  }
+}
   
-  .daily-item, .hourly-item 
-  {
+.daily-item, .hourly-item 
+{
     min-width: 150px;
     background: #007acc;
     color: white;
@@ -46,35 +58,35 @@
     padding: 1em;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-  }
+}
   
-  .daily-item p, .hourly-item p 
-  {
+.daily-item p, .hourly-item p 
+{
     margin: 0 0 0.5em;
-  }
+}
   
-  .daily-item {
+.daily-item {
     flex: 0 0 auto; /* Ensure items do not shrink */
-  }
+}
   
-  .hourly-item {
+.hourly-item {
     flex: 0 0 auto; /* Ensure items do not shrink */
-  }
+}
   
   /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
-  .daily-forecast::-webkit-scrollbar, 
-  .hourly-forecast::-webkit-scrollbar {
+.daily-forecast::-webkit-scrollbar, 
+.hourly-forecast::-webkit-scrollbar {
     height: 8px;
-  }
+}
   
-  .daily-forecast::-webkit-scrollbar-thumb, 
-  .hourly-forecast::-webkit-scrollbar-thumb {
+.daily-forecast::-webkit-scrollbar-thumb, 
+.hourly-forecast::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 4px;
-  }
+}
   
-  .daily-forecast::-webkit-scrollbar-track, 
-  .hourly-forecast::-webkit-scrollbar-track {
+.daily-forecast::-webkit-scrollbar-track, 
+.hourly-forecast::-webkit-scrollbar-track {
     background: #f9f9f9;
-  }
+}
   
