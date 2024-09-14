@@ -2,16 +2,18 @@
 .privacy-security-consent 
 {
     position: fixed;
-    bottom: 3%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95); /* Light semi-transparent background */
+    top: 0;
+    left: 0;
+    /* transform: translateX(-50%, -50%); */
+    background: rgba(191, 191, 191, 0.95); 
     color: #333;
     padding: 1em 2em;
     text-align: center;
     z-index: 1000;
     border-radius: 8px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .privacy-security-consent h2 

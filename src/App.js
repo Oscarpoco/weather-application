@@ -34,18 +34,23 @@ function App() {
   // SAVE WEATHER DATA TO LOCAL STORAGE
   useEffect(() => {
     if (data.name) {
+      setTimeout(()=>{
       localStorage.setItem('weatherData', JSON.stringify(data));
+      }, 1);
     }
   }, [data]);
 
   // SAVE CITIES HISTORY TO LOCAL STORAGE
   useEffect(() => {
+    setTimeout(()=>{
     localStorage.setItem('citiesHistory', JSON.stringify(citiesHistory));
+    }, 1);
+
   }, [citiesHistory]);
 
   // FETCH WEATHER DATA FUNCTION
 const fetchWeatherData = useCallback((selectedCity) => {
-  const query = selectedCity || location; // Use selectedCity if provided, otherwise fallback to location state
+  const query = selectedCity || location;
 
   axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
     .then((response) => {
@@ -74,7 +79,7 @@ const fetchWeatherData = useCallback((selectedCity) => {
   const SearchLocation = (e) => {
     if (e.key === 'Enter') {
       fetchWeatherData();
-      setLocation(''); // Clear the input field after searching
+      setLocation(''); 
     }
   };
 
@@ -126,7 +131,8 @@ const fetchWeatherData = useCallback((selectedCity) => {
 
       {/* BODY */}
       {data.name && (
-        <main>
+      <main>
+        <div className='main-wrapper'>
 
           {/* TOP CONTAINER */}
           <div className='top'>
@@ -182,7 +188,8 @@ const fetchWeatherData = useCallback((selectedCity) => {
           </div>
           {/* ENDS */}
 
-        </main>
+        </div>
+      </main>
       )}
 
       {/* POPUPS */}
