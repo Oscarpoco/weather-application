@@ -64,7 +64,7 @@ h1
   height: 100vh;
   height: 100%;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   overflow: hidden;
   display: flex;
   flex-direction: column;

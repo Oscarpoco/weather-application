@@ -25,6 +25,11 @@ function App() {
       setData(JSON.parse(savedData));
     }
 
+    const savedForecastData = localStorage.getItem('forecast');
+    if (savedForecastData) {
+      setForecastData(JSON.parse(savedForecastData));
+    }
+
     const savedHistory = localStorage.getItem('citiesHistory');
     if (savedHistory) {
       setCitiesHistory(JSON.parse(savedHistory));
@@ -47,6 +52,14 @@ function App() {
     }, 1);
 
   }, [citiesHistory]);
+
+  // SAVE forecast TO LOCAL STORAGE
+  useEffect(() => {
+    setTimeout(()=>{
+    localStorage.setItem('forecast', JSON.stringify(forecastData));
+    }, 1);
+
+  }, [forecastData]);
 
   // FETCH WEATHER DATA FUNCTION
 const fetchWeatherData = useCallback((selectedCity) => {
@@ -73,6 +86,8 @@ const fetchWeatherData = useCallback((selectedCity) => {
     });
 }, [location, settings.temperatureUnit]);
 // ENDS
+
+
 
 
   // SEARCH LOCATION FUNCTION
@@ -205,6 +220,7 @@ const fetchWeatherData = useCallback((selectedCity) => {
         setCitiesHistory={setCitiesHistory}
       />
       {/* ENDS  */}
+
     </div>
   );
 }

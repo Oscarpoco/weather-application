@@ -13,6 +13,20 @@
     z-index: 1000;
     padding: 0 10px;
   }
+
+.user-privacy-overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
   
   /* Popup content styled as full-screen */
   .popup-content 
@@ -21,9 +35,7 @@
     padding: 2em;
     padding-top: 1em;
     border-radius: 10px;
-    /* border: 1px solid aqua; */
     position: relative;
-    /* top: 30px; */
     width: 90%;
     height: 92vh;
     max-width: 500px;
@@ -31,6 +43,61 @@
     justify-content: space-between;
     flex-direction: column;
     gap: .4em;
+   
+  }
+
+  .user-privacy-content
+  {
+    background: rgba(255, 255, 255, 1);
+    padding: 1em;
+    width: 100%;
+    height: 100vh;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: .7em;
+  }
+
+  .user-privacy-content h1
+  {
+    font-size: 1.7em;
+    color: black;
+    padding: 0;
+  }
+
+  .user-privacy-content h2
+  {
+    font-size: unset;
+    color: black;
+    display: flex;
+    
+  }
+
+  .user-privacy-content p
+  {
+    font-size: unset;
+    color: black;
+    font-weight: unset;
+  }
+
+  .return-button
+  {
+    border-radius: 50px;
+    padding: .7em 0;
+    border: 0;
+    box-shadow: 0 0 10px;
+    font-weight: 600;
+    cursor: pointer;
+    /* background: rgb(210, 210, 210); */
+  }
+
+  .return-button:hover
+  {
+    background: white;
+    transition: all .5s ease-in;
+    transition: all .5s ease-out;
   }
   
   /* Close button */
@@ -237,6 +304,12 @@
     padding: 10px 0 10px 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+  }
+
+  .developer-content h6 span
+  {
+    color: grey;
+    cursor: pointer;
   }
   
   .devloper-popup-close 

@@ -33,7 +33,7 @@ const PrivacySecurityConsent = () => {
 
     return (
         <div className="privacy-security-consent">
-            <h2>Privacy and Security Settings</h2>
+            <h2>Privacy and Security Cookies</h2>
             <p>
                 When using our weather app, your privacy and security are our top priorities. To provide accurate weather updates, we may collect and use your location data. This data allows us to deliver real-time forecasts and personalized weather insights tailored to your specific area. Rest assured, your location information is handled with the utmost care and used solely to enhance your experience with our app. We employ industry-standard security measures to protect your data, ensuring that your personal information remains confidential and secure. By using our app, you consent to the safe and responsible use of your location data, enabling us to provide you with the most accurate and timely weather information.
             </p>
