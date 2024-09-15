@@ -7,6 +7,7 @@ import CookieConsent from './CookieConsent';
 import PrivacySecurityConsent from './PrivacySecurityConsent';
 import WeatherForecast from './WeatherForecast';
 import Popup from './Popup';
+import Loader from './Loader';
 
 function App() {
   const [data, setData] = useState({});
@@ -14,9 +15,15 @@ function App() {
   const [forecastData, setForecastData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [citiesHistory, setCitiesHistory] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({
     temperatureUnit: 'metric' 
   });
+
+  setTimeout(()=>{
+    setLoading(false);
+  }, 3000);
 
   // LOAD WEATHER DATA FROM LOCAL STORAGE
   useEffect(() => {
@@ -62,29 +69,44 @@ function App() {
   }, [forecastData]);
 
   // FETCH WEATHER DATA FUNCTION
-const fetchWeatherData = useCallback((selectedCity) => {
-  const query = selectedCity || location;
-
-  axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
-    .then((response) => {
-      const fetchedData = response.data;
-      setData(fetchedData);
-
-      // Add the searched city to the history
-      setCitiesHistory((prevHistory) => {
-        const newHistory = prevHistory.filter(city => city !== fetchedData.name);
-        return [fetchedData.name, ...newHistory];
+  const fetchWeatherData = useCallback((selectedCity) => {
+    const query = selectedCity || location;
+  
+    // First, fetch the current weather data
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
+      .then((response) => {
+        const fetchedData = response.data;
+        setData(fetchedData);
+  
+        // Clear any previous error since this call was successful
+        setError(null);
+  
+        // Add the searched city to the history
+        setCitiesHistory((prevHistory) => {
+          const newHistory = prevHistory.filter(city => city !== fetchedData.name);
+          return [fetchedData.name, ...newHistory];
+        });
+  
+        // Now, fetch the forecast data using the city name
+        return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
+      })
+      .then((response) => {
+        setForecastData(response.data.list);
+  
+        setError(null);
+      })
+      .catch((error) => {
+        console.error("Error fetching forecast data:", error);
+        
+        if (error.response && error.response.status === 404) {
+          setError("City not found. Please check the name.");
+        }
+        setTimeout(()=>{
+            setError(null)
+        }, 3000)
       });
-
-      return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
-    })
-    .then((response) => {
-      setForecastData(response.data.list);
-    })
-    .catch((error) => {
-      console.error("Error fetching weather data:", error);
-    });
-}, [location, settings.temperatureUnit]);
+  }, [location, settings.temperatureUnit]);
+  
 // ENDS
 
 
@@ -92,21 +114,28 @@ const fetchWeatherData = useCallback((selectedCity) => {
 
   // SEARCH LOCATION FUNCTION
   const SearchLocation = (e) => {
-    if (e.key === 'Enter') {
-      fetchWeatherData();
-      setLocation(''); 
-    }
+    e.preventDefault();
+    setLoading(true)
+    setTimeout(()=>{
+      if (e.key === 'Enter') {
+        fetchWeatherData();
+        setLocation(''); 
+        setLoading(false);
+      }
+    }, 1000)
   };
 
-  // AUTO UPDATE WEATHER EVERY 1 MINUTE
+  // AUTO UPDATE WEATHER
   useEffect(() => {
+    setLoading(true)
     if (data.name) {
       const interval = setInterval(() => {
         fetchWeatherData();
-      }, 60000);
+      }, 3000);
 
       return () => clearInterval(interval);
     }
+    setLoading(false)
   }, [data.name, settings.temperatureUnit, fetchWeatherData]);
 
   // TOGGLE POPUP MENU
@@ -220,6 +249,18 @@ const fetchWeatherData = useCallback((selectedCity) => {
         setCitiesHistory={setCitiesHistory}
       />
       {/* ENDS  */}
+
+      {/* erro */}
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      {/* LOADER */}
+      {loading && (
+        <Loader />
+      )}
 
     </div>
   );
