@@ -16,14 +16,11 @@ function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [citiesHistory, setCitiesHistory] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState({
     temperatureUnit: 'metric' 
   });
 
-  setTimeout(()=>{
-    setLoading(false);
-  }, 3000);
 
   // LOAD WEATHER DATA FROM LOCAL STORAGE
   useEffect(() => {
@@ -48,7 +45,7 @@ function App() {
     if (data.name) {
       setTimeout(()=>{
       localStorage.setItem('weatherData', JSON.stringify(data));
-      }, 1);
+      }, 1000);
     }
   }, [data]);
 
@@ -56,7 +53,7 @@ function App() {
   useEffect(() => {
     setTimeout(()=>{
     localStorage.setItem('citiesHistory', JSON.stringify(citiesHistory));
-    }, 1);
+    }, 1000);
 
   }, [citiesHistory]);
 
@@ -64,7 +61,7 @@ function App() {
   useEffect(() => {
     setTimeout(()=>{
     localStorage.setItem('forecast', JSON.stringify(forecastData));
-    }, 1);
+    }, 1000);
 
   }, [forecastData]);
 
@@ -73,7 +70,7 @@ function App() {
     const query = selectedCity || location;
   
     // First, fetch the current weather data
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`)
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=ccf4cbb1561c9d6b7b4dfe9eadd94a00&units=${settings.temperatureUnit}`)
       .then((response) => {
         const fetchedData = response.data;
         setData(fetchedData);
@@ -88,7 +85,7 @@ function App() {
         });
   
         // Now, fetch the forecast data using the city name
-        return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=25160517a2420597ecea94ef0c801eb8&units=${settings.temperatureUnit}`);
+        return axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${fetchedData.name}&appid=ccf4cbb1561c9d6b7b4dfe9eadd94a00&units=${settings.temperatureUnit}`);
       })
       .then((response) => {
         setForecastData(response.data.list);
@@ -114,24 +111,20 @@ function App() {
 
   // SEARCH LOCATION FUNCTION
   const SearchLocation = (e) => {
-    e.preventDefault();
-    setLoading(true)
-    setTimeout(()=>{
+   
       if (e.key === 'Enter') {
+        
         fetchWeatherData();
         setLocation(''); 
-        setLoading(false);
       }
-    }, 1000)
   };
 
   // AUTO UPDATE WEATHER
   useEffect(() => {
-    setLoading(true)
     if (data.name) {
       const interval = setInterval(() => {
         fetchWeatherData();
-      }, 3000);
+      }, 60000);
 
       return () => clearInterval(interval);
     }
