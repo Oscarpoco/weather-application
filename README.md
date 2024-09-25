@@ -5,6 +5,8 @@ We now have updated and it is compatible for desktop view too
 ## NB:
 When you launch this application after cloning it , it will show blank screen because of the mobile compatible, You will need to right click on your browser or press f12 to go to developer mode , access inspect and chose mobile view on responsive tab, after searching for the location it will then reveal the information aboit the location you have searched , then you can go back to desktop view after these steps 
 
+https://weather-application-phi-livid.vercel.app/
+
 ## Overview
 WeatherApp is a sleek, modern, and responsive weather application built with React. It provides users with real-time weather information, including temperature, humidity, wind speed, and weather conditions, for any location around the world. Features Real-Time Weather Data: Get up-to-date weather information for any location. Search Functionality: Easily search for weather information by city name. Dynamic Backgrounds: Beautiful gradient backgrounds change according to weather conditions. Responsive Design: Optimized for both desktop and mobile devices. Neon Themes: Visually striking neon color themes for different weather conditions (sunny, cloudy, rainy, snowy, thunderstorm, etc.). Detailed Forecast: Provides detailed weather information including temperature, humidity, wind speed, and more. 
 
